@@ -124,7 +124,7 @@ CREATE TABLE [dbo].[Notification](
     [idNotification] [int] IDENTITY(1,1) NOT NULL,
     [type] [int] NULL,
     [employee] [varchar](50) NULL,
-    [client] [varchar](50) NULL,
+    [customer] [varchar](50) NULL,
     [quantity] [int] NULL,
     [description] [varchar](100) NULL,
     [date] [datetime] NULL DEFAULT (getdate()),
@@ -156,7 +156,6 @@ PRIMARY KEY CLUSTERED
     [idApplication] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
 ALTER TABLE [dbo].[Installments]  WITH CHECK ADD FOREIGN KEY([loan])
