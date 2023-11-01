@@ -4,7 +4,7 @@ GO
 
 CREATE DATABASE [LoanSystem]
 
-/****** Second, create the tables ******/
+/****** Create the tables Customer******/
 USE [LoanSystem]
 GO
 
@@ -12,7 +12,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE TABLE [dbo].[Customer](
     [idCustomer] [int] IDENTITY(1,1) NOT NULL,
     [Name] [varchar](50) NOT NULL,
@@ -25,9 +24,9 @@ CREATE TABLE [dbo].[Customer](
     [Company] [varchar](50) NOT NULL,
     [CompanyPhone] [varchar](50) NOT NULL,
     [Position] [varchar](50) NOT NULL,
-    [Income] [varchar](50) NOT NULL,
+    [Income] [numeric](10, 2) NOT NULL,
     [Supervisor] [varchar](50) NOT NULL,
-    [OtherIncome] [varchar](50) NOT NULL,
+    [OtherIncome] [numeric](10, 2) NOT NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
     [idCustomer] ASC
@@ -35,23 +34,32 @@ CREATE TABLE [dbo].[Customer](
 ) ON [PRIMARY]
 GO
 
+/****** Create the tables Installments******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Installments](
     [idInstallment] [int] IDENTITY(1,1) NOT NULL,
     [installmentNumber] [int] NULL,
-    [amount] [int] NULL,
-    [installmentAmount] [int] NULL,
-    [interest] [int] NULL,
+    [amount] [numeric](10, 2) NOT NULL,
+    [installmentAmount] [numeric](10, 2) NOT NULL,
+    [interest] [numeric](10, 2) NOT NULL,
     [paymentDate] [datetime] NULL,
-    [status] [int] NULL,
+    [status] [varchar](50) NOT NULL,
     [loan] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
     [idInstallment] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
+/****** Create the tables Employee******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Employee](
     [idEmployee] [int] IDENTITY(1,1) NOT NULL,
     [Name] [varchar](50) NULL,
@@ -63,27 +71,15 @@ CREATE TABLE [dbo].[Employee](
  CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
 (
     [idEmployee] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-UNIQUE NONCLUSTERED 
-(
-    [Username] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
-CREATE TABLE [dbo].[EmployeeImages](
-    [ImageId] [int] NOT NULL,
-    [Image] [image] NOT NULL,
-    [User] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-    [ImageId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
+/****** Create the tables Companies******/
+SET ANSI_NULLS ON
 GO
-
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Companies](
     [idCompany] [int] NOT NULL,
     [Name] [varchar](50) NULL,
@@ -96,9 +92,13 @@ CREATE TABLE [dbo].[Companies](
     [idCompany] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
+/****** Create the tables Guarantor******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Guarantor](
     [idGuarantor] [int] IDENTITY(1,1) NOT NULL,
     [Name] [varchar](50) NULL,
@@ -113,26 +113,13 @@ PRIMARY KEY CLUSTERED
     [idGuarantor] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
-CREATE TABLE [dbo].[Guarantors](
-    [idGuarantor] [int] NOT NULL,
-    [Name] [varchar](50) NULL,
-    [Residence] [varchar](100) NULL,
-    [Salary] [int] NOT NULL,
-    [IDNumber] [varchar](12) NULL,
-    [Company] [varchar](25) NULL,
-    [Email] [varchar](25) NULL,
-    [Contact] [varchar](25) NULL,
- CONSTRAINT [PK_Guarantors] PRIMARY KEY CLUSTERED 
-(
-    [idGuarantor] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+/****** Create the tables Notification******/
+SET ANSI_NULLS ON
 GO
-
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[Notification](
     [idNotification] [int] IDENTITY(1,1) NOT NULL,
     [type] [int] NULL,
@@ -146,9 +133,13 @@ PRIMARY KEY CLUSTERED
     [idNotification] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
 
+/****** Create the tables LoanApplication******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [dbo].[LoanApplication](
     [idApplication] [int] IDENTITY(1,1) NOT NULL,
     [installmentCount] [int] NOT NULL,
@@ -156,5 +147,29 @@ CREATE TABLE [dbo].[LoanApplication](
     [loanInterest] [int] NOT NULL,
     [approval] [int] NOT NULL,
     [paymentMethod] [int] NOT NULL,
-    [client] [int] NULL,
-    [guarant
+    [Customer] [int] NOT NULL,
+    [guarantors] [int] NOT NULL,
+    [Employee] [int] NOT NULL,
+    [applicationDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+    [idApplication] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Installments]  WITH CHECK ADD FOREIGN KEY([loan])
+REFERENCES [dbo].[LoanApplication] ([idApplication])
+GO
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([Employee])
+REFERENCES [dbo].[Employee] ([idEmployee])
+GO
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([Customer])
+REFERENCES [dbo].[Customer] ([idCustomer])
+GO
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([guarantors])
+REFERENCES [dbo].[Guarantor] ([idGuarantor])
+GO
+USE [master]
+GO
