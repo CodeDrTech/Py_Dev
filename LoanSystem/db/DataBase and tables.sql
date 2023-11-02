@@ -14,19 +14,19 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Customer](
     [idCustomer] [int] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar](50) NOT NULL,
-    [Phone] [varchar](50) NULL,
-    [Cellphone] [varchar](50) NOT NULL,
-    [IDNumber] [nvarchar](20) NULL,
-    [Residence] [varchar](50) NOT NULL,
-    [Email] [varchar](50) NULL,
-    [Gender] [varchar](50) NULL,
-    [Company] [varchar](50) NOT NULL,
-    [CompanyPhone] [varchar](50) NOT NULL,
-    [Position] [varchar](50) NOT NULL,
-    [Income] [numeric](10, 2) NOT NULL,
-    [Supervisor] [varchar](50) NOT NULL,
-    [OtherIncome] [numeric](10, 2) NOT NULL,
+    [name] [varchar](50) NOT NULL,
+    [phone] [varchar](50) NULL,
+    [cellphone] [varchar](50) NOT NULL,
+    [idNumber] [nvarchar](20) NULL,
+    [residence] [varchar](50) NOT NULL,
+    [email] [varchar](50) NULL,
+    [gender] [varchar](50) NULL,
+    [company] [varchar](50) NOT NULL,
+    [companyPhone] [varchar](50) NOT NULL,
+    [position] [varchar](50) NOT NULL,
+    [income] [numeric](10, 2) NOT NULL,
+    [supervisor] [varchar](50) NOT NULL,
+    [otherIncome] [numeric](10, 2) NOT NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
     [idCustomer] ASC
@@ -62,12 +62,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Employee](
     [idEmployee] [int] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar](50) NULL,
-    [Cellphone] [varchar](50) NULL,
-    [Salary] [varchar](50) NULL,
-    [Username] [varchar](50) NULL,
-    [Password] [varchar](50) NULL,
-    [Category] [varchar](50) NULL,
+    [name] [varchar](50) NULL,
+    [cellphone] [varchar](50) NULL,
+    [salary] [varchar](50) NULL,
+    [username] [varchar](50) NULL,
+    [password] [varchar](50) NULL,
+    [category] [varchar](50) NULL,
  CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
 (
     [idEmployee] ASC
@@ -82,11 +82,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Companies](
     [idCompany] [int] NOT NULL,
-    [Name] [varchar](50) NULL,
-    [Street] [varchar](100) NULL,
-    [City] [varchar](50) NULL,
-    [Sector] [varchar](50) NULL,
-    [Number] [int] NULL,
+    [name] [varchar](50) NULL,
+    [street] [varchar](100) NULL,
+    [city] [varchar](50) NULL,
+    [sector] [varchar](50) NULL,
+    [number] [int] NULL,
  CONSTRAINT [PK_Companies] PRIMARY KEY CLUSTERED 
 (
     [idCompany] ASC
@@ -101,13 +101,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Guarantor](
     [idGuarantor] [int] IDENTITY(1,1) NOT NULL,
-    [Name] [varchar](50) NULL,
-    [Residence] [varchar](50) NULL,
-    [Salary] [int] NULL,
-    [IDNumber] [varchar](20) NULL,
-    [Company] [varchar](20) NULL,
-    [Email] [varchar](20) NULL,
-    [Contact] [varchar](20) NULL,
+    [name] [varchar](50) NULL,
+    [residence] [varchar](50) NULL,
+    [salary] [int] NULL,
+    [idNumber] [varchar](20) NULL,
+    [company] [varchar](20) NULL,
+    [email] [varchar](20) NULL,
+    [contact] [varchar](20) NULL,
 PRIMARY KEY CLUSTERED 
 (
     [idGuarantor] ASC
@@ -122,9 +122,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Notification](
     [idNotification] [int] IDENTITY(1,1) NOT NULL,
-    [type] [int] NULL,
-    [employee] [varchar](50) NULL,
-    [customer] [varchar](50) NULL,
+    [type] [varchar](100) NULL,
+    [idApplication] [int] NULL,
+    [customer] [int] NULL,
     [quantity] [int] NULL,
     [description] [varchar](100) NULL,
     [date] [datetime] NULL DEFAULT (getdate()),
@@ -143,13 +143,14 @@ GO
 CREATE TABLE [dbo].[LoanApplication](
     [idApplication] [int] IDENTITY(1,1) NOT NULL,
     [installmentCount] [int] NOT NULL,
-    [requestedAmount] [int] NOT NULL,
-    [loanInterest] [int] NOT NULL,
-    [approval] [int] NOT NULL,
-    [paymentMethod] [int] NOT NULL,
-    [Customer] [int] NOT NULL,
-    [guarantors] [int] NOT NULL,
-    [Employee] [int] NOT NULL,
+    [requestedAmount] [numeric](10, 2) NOT NULL,
+    [loanInterest] [numeric](10, 2) NOT NULL,
+    [approvalAmount] [numeric](10, 2) NOT NULL,
+    [paymentMethod] [varchar](50) NOT NULL,
+    [idCustomer] [int] NOT NULL,
+    [idGuarantor] [int] NOT NULL,
+    [idEmployee] [int] NOT NULL,
+	[status] [varchar](20) NOT NULL,
     [applicationDate] [datetime] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -158,16 +159,16 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Installments]  WITH CHECK ADD FOREIGN KEY([loan])
+ALTER TABLE [dbo].[Notification]  WITH CHECK ADD FOREIGN KEY([idApplication])
 REFERENCES [dbo].[LoanApplication] ([idApplication])
 GO
-ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([Employee])
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([idEmployee])
 REFERENCES [dbo].[Employee] ([idEmployee])
 GO
-ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([Customer])
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([idCustomer])
 REFERENCES [dbo].[Customer] ([idCustomer])
 GO
-ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([guarantors])
+ALTER TABLE [dbo].[LoanApplication]  WITH CHECK ADD FOREIGN KEY([idGuarantor])
 REFERENCES [dbo].[Guarantor] ([idGuarantor])
 GO
 USE [master]
